@@ -1,15 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Button} from 'antd';
+import {Spin} from 'antd';
+import {Component} from '@tylerlong/use-proxy/build/react';
 
 import './index.css';
+import {Store} from './models';
+import store from './store';
 
-class App extends React.Component {
+class App extends Component<{store: Store}> {
   render() {
+    const {store} = this.props;
     return (
       <>
         <h1>RCV Metaverse!</h1>
-        <Button>Login</Button>
+        {store.ready ? (
+          store.hasToken ? (
+            'Has valid token'
+          ) : (
+            'No valid token'
+          )
+        ) : (
+          <Spin size="large" />
+        )}
       </>
     );
   }
@@ -17,4 +29,4 @@ class App extends React.Component {
 
 const container = document.createElement('div');
 document.body.appendChild(container);
-ReactDOM.render(<App />, container);
+ReactDOM.render(<App store={store} />, container);
