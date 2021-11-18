@@ -43,6 +43,7 @@ export class Store {
   loginUrl = '';
   meetingId = process.env.RINGCENTRAL_MEETING_ID ?? '';
   joining = false;
+  hasTrack = false;
 
   get isMeetingIdValid() {
     return /\b\d{9}\b/.test(this.meetingId);
@@ -283,6 +284,7 @@ export class Store {
     // play the videos
     peerConnection.ontrack = e => {
       if (e.track.kind === 'video') {
+        this.hasTrack = true;
         const videoElement = document.createElement(
           'video'
         ) as HTMLVideoElement;

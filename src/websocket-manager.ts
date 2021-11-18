@@ -15,7 +15,7 @@ class WebSocketManager extends EventEmitter {
     this.ws.addEventListener('message', e => {
       console.log('******** inbound message ********');
       const inboundMessage: InboundMessage = JSON.parse(e.data as string);
-      console.log(JSON.stringify(inboundMessage, null, 2) + '\n');
+      console.log(JSON.stringify(inboundMessage, null, 2) + '\n\n');
       this.emit(WebSocketManager.INBOUND_MESSAGE, inboundMessage);
     });
   }
@@ -29,7 +29,7 @@ class WebSocketManager extends EventEmitter {
     }
     const message = JSON.stringify(data, null, 2);
     console.log('******** outbound message ********');
-    console.log(message + '\n');
+    console.log(message + '\n\n');
     this.ws.send(message);
   }
 

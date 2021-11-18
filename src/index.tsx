@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Button, Input, Spin} from 'antd';
+import {Button, Divider, Input, Spin} from 'antd';
 import {Component} from '@tylerlong/use-proxy/build/react';
 
 import './index.css';
@@ -19,8 +19,11 @@ class App extends Component<{store: Store}> {
               <Button onClick={() => store.logout()} id="logout-btn">
                 Logout
               </Button>
+              <p>Enter a meeting ID or a meeting link to continue.</p>
+              <p>Please make sure that the meeting is currently ongoing.</p>
               <p>
-                Please enter a meeting ID or a meeting link to join the meeting.
+                At least one of the participants turn on video or do screen
+                share.
               </p>
               <Input.Group compact>
                 <Input
@@ -35,9 +38,11 @@ class App extends Component<{store: Store}> {
                   disabled={store.joining || !store.isMeetingIdValid}
                   onClick={() => store.joinMeeting()}
                 >
-                  Join Meeting
+                  Enter RCV Metaverse
                 </Button>
               </Input.Group>
+              <Divider />
+              {store.joining && !store.hasTrack ? <Spin size="large" /> : null}
             </>
           ) : (
             <Button type="primary" onClick={() => store.login()}>
