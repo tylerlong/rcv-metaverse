@@ -12,15 +12,12 @@ class App extends Component<{store: Store}> {
     const {store} = this.props;
     return (
       <>
-        <h1>RCV Metaverse!</h1>
+        <h1>RCV Metaverse</h1>
         {store.ready ? (
           store.hasToken ? (
-            'You have logged in. But this website is still under construction.'
+            <Button onClick={() => store.logout()}>Logout</Button>
           ) : (
-            <Button
-              type="primary"
-              onClick={() => window.location.replace(store.loginUrl)}
-            >
+            <Button type="primary" onClick={() => store.login()}>
               Login
             </Button>
           )
