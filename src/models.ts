@@ -9,6 +9,12 @@ import {
   TOKEN_INFO_KEY,
 } from './constants';
 import rc from './ringcentral';
+import {Bridge, CreateResponse, InboundMessage, Meeting} from './types';
+import WebSocketManager from './websocket-manager';
+
+const baseTime = Date.now();
+let req_seq = -1;
+let webSocketManager: WebSocketManager;
 
 const checkSavedToken = async () => {
   const tokenInfo = await localforage.getItem<TokenInfo>(TOKEN_INFO_KEY);
@@ -30,9 +36,10 @@ export class Store {
   hasToken = false;
   loginUrl = '';
   meetingId = '';
+  joining = false;
 
   get isMeetingIdValid() {
-    return /^\d{9}$/.test(this.meetingId);
+    return /\b\d{9}\b/.test(this.meetingId);
   }
 
   // right after page loaded
@@ -80,7 +87,131 @@ export class Store {
   }
 
   // click the join meeting button
-  joinMeeting() {
-    alert('Under construction.');
+  async joinMeeting() {
+    this.joining = true;
+    const shortId = this.meetingId.match(/\b\d{9}\b/)![0];
+
+    // fetch bridge
+    let r = await rc.get('/rcvideo/v1/bridges', {shortId});
+    const bridge = r.data as Bridge;
+
+    // fetch meeting
+    r = await rc.post(
+      `/rcvideo/v1/bridges/${bridge.id}/meetings`,
+      {
+        participants: [
+          {
+            sessions: [
+              {
+                userAgent: 'rcv/web/0.10',
+                operatingSystem: 'macos',
+                localMute: false,
+                localMuteVideo: false,
+              },
+            ],
+            streams: [{audio: {isActiveIn: false, isActiveOut: false}}],
+          },
+        ],
+      },
+      {
+        baseStateOnly: '1',
+      }
+    );
+    const meeting = r.data as Meeting;
+
+    // local session
+    const participant = meeting.participants[0];
+    const session = participant.sessions[0];
+
+    // init the WebSocketManager
+    webSocketManager = new WebSocketManager(meeting.wsConnectionUrl);
+
+    // auto respond to message from sfu
+    webSocketManager.on(
+      WebSocketManager.INBOUND_MESSAGE,
+      (inboundMessage: InboundMessage) => {
+        if (inboundMessage.event === 'network_status_req') {
+          webSocketManager.send({
+            req_src: 'sfu',
+            req_seq: inboundMessage.req_seq,
+            rx_ts: Date.now() - baseTime,
+            tx_ts: Date.now() - baseTime,
+            success: true,
+            event: 'network_status_resp',
+            body: {},
+            version: 1,
+            type: 'session',
+            id: session.id,
+          });
+        } else if (inboundMessage.event === 'as_report_req') {
+          webSocketManager.send({
+            req_src: 'sfu',
+            req_seq: inboundMessage.req_seq,
+            rx_ts: Date.now() - baseTime,
+            tx_ts: Date.now() - baseTime,
+            success: true,
+            event: 'as_report_resp',
+            body: {},
+            version: 1,
+            type: 'session',
+            id: session.id,
+          });
+        }
+      }
+    );
+
+    // join meeting
+    await webSocketManager.send({
+      req_src: 'webcli',
+      req_seq: ++req_seq,
+      tx_ts: Date.now() - baseTime,
+      event: 'create_req',
+      body: {
+        max_remote_audio: 2,
+        max_remote_video: [
+          {
+            quality: 2,
+            slots: 2,
+          },
+        ],
+        conference_id: '',
+        sdp_semantics: 'plan-b',
+        token: session.token,
+        meta: {
+          meeting_id: bridge.shortId,
+          user_agent:
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36',
+          x_user_agent:
+            'RCAppRCVWeb/21.3.33.0 (RingCentral; macos/10.15; rev.aaebe132)',
+        },
+      },
+      version: 1,
+      type: 'session',
+      id: session.id,
+    });
+
+    // join meeting response
+    const createSeq = req_seq;
+    const createResponse =
+      await webSocketManager.waitForMessage<CreateResponse>(respMessage => {
+        return (
+          respMessage.event === 'create_resp' &&
+          respMessage.req_seq === createSeq
+        );
+      });
+
+    // join meeting acknowledge
+    await webSocketManager.send({
+      req_src: 'webcli',
+      req_seq: createSeq,
+      rx_ts: Date.now() - baseTime,
+      tx_ts: Date.now() - baseTime,
+      success: true,
+      event: 'create_ack',
+      body: {},
+      version: 1,
+      type: 'session',
+      id: session.id,
+    });
   }
 }
