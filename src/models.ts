@@ -287,7 +287,7 @@ export class Store {
           'video'
         ) as HTMLVideoElement;
         videoElement.autoplay = true;
-        videoElement.setAttribute('width', '800');
+        videoElement.setAttribute('width', '400');
         document.body.appendChild(videoElement);
         videoElement.srcObject = e.streams[0];
       }
