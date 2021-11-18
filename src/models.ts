@@ -41,7 +41,7 @@ export class Store {
   ready = false;
   hasToken = false;
   loginUrl = '';
-  meetingId = '';
+  meetingId = process.env.RINGCENTRAL_MEETING_ID ?? '';
   joining = false;
 
   get isMeetingIdValid() {
@@ -176,8 +176,8 @@ export class Store {
         max_remote_audio: 0,
         max_remote_video: [
           {
-            quality: 3,
-            slots: 3,
+            quality: 1,
+            slots: 100,
           },
         ],
         conference_id: '',
