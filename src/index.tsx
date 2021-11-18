@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Button, Spin} from 'antd';
+import {Button, Input, Spin} from 'antd';
 import {Component} from '@tylerlong/use-proxy/build/react';
 
 import './index.css';
@@ -15,7 +15,22 @@ class App extends Component<{store: Store}> {
         <h1>RCV Metaverse</h1>
         {store.ready ? (
           store.hasToken ? (
-            <Button onClick={() => store.logout()}>Logout</Button>
+            <>
+              <Button onClick={() => store.logout()} id="logout-btn">
+                Logout
+              </Button>
+              <p>Please enter the 9-digits meeting ID to join the meeting.</p>
+              <Input.Group compact>
+                <Input
+                  style={{width: '12rem'}}
+                  placeholder="123456789"
+                  onChange={e => (store.meetingId = e.target.value)}
+                />
+                <Button type="primary" disabled={!store.isMeetingIdValid}>
+                  Join Meeting
+                </Button>
+              </Input.Group>
+            </>
           ) : (
             <Button type="primary" onClick={() => store.login()}>
               Login

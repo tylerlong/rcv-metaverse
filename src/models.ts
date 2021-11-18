@@ -29,6 +29,11 @@ export class Store {
   ready = false;
   hasToken = false;
   loginUrl = '';
+  meetingId = '';
+
+  get isMeetingIdValid() {
+    return /^\d{9}$/.test(this.meetingId);
+  }
 
   // right after page loaded
   async init() {
