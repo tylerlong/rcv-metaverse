@@ -9,7 +9,13 @@ import {
   TOKEN_INFO_KEY,
 } from './constants';
 import rc from './ringcentral';
-import {Bridge, CreateResponse, InboundMessage, Meeting} from './types';
+import {
+  Bridge,
+  CreateResponse,
+  InboundMessage,
+  Meeting,
+  UpdateResponse,
+} from './types';
 import WebSocketManager from './websocket-manager';
 
 const baseTime = Date.now();
@@ -213,5 +219,86 @@ export class Store {
       type: 'session',
       id: session.id,
     });
+
+    // WebRTC peer connection
+    const peerConnection = new RTCPeerConnection({
+      iceServers: createResponse.body.ice_servers,
+      sdpSemantics: 'plan-b',
+    } as RTCConfiguration);
+
+    const userMedia = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: true,
+    });
+    for (const track of userMedia.getTracks()) {
+      peerConnection.addTrack(track, userMedia);
+    }
+    const offer = await peerConnection.createOffer();
+    await peerConnection.setLocalDescription(offer);
+
+    // send offer
+    await webSocketManager.send({
+      req_src: 'webcli',
+      req_seq: ++req_seq,
+      tx_ts: Date.now() - baseTime,
+      event: 'update_req',
+      body: {
+        sdp: peerConnection.localDescription!.sdp,
+        streams: [
+          {
+            id: userMedia.id,
+            msid: userMedia.id,
+          },
+        ],
+      },
+      version: 1,
+      type: 'session',
+      id: session.id,
+    });
+
+    // send offer response
+    const updateSeq = req_seq;
+    const updateResponse =
+      await webSocketManager.waitForMessage<UpdateResponse>(inboundMessage => {
+        return (
+          inboundMessage.event === 'update_resp' &&
+          inboundMessage.req_seq === updateSeq
+        );
+      });
+
+    // send offer acknowledge
+    await webSocketManager.send({
+      req_src: 'webcli',
+      req_seq: updateSeq,
+      rx_ts: Date.now() - baseTime,
+      tx_ts: Date.now() - baseTime,
+      success: true,
+      event: 'update_ack',
+      body: {},
+      version: 1,
+      type: 'session',
+      id: session.id,
+    });
+
+    // play the videos
+    peerConnection.ontrack = e => {
+      if (e.track.kind === 'video') {
+        const videoElement = document.createElement(
+          'video'
+        ) as HTMLVideoElement;
+        videoElement.autoplay = true;
+        videoElement.setAttribute('width', '800');
+        document.body.appendChild(videoElement);
+        videoElement.srcObject = e.streams[0];
+      }
+    };
+
+    // set remote answer
+    await peerConnection.setRemoteDescription(
+      new RTCSessionDescription({
+        type: 'answer',
+        sdp: updateResponse.body.sdp,
+      })
+    );
   }
 }
