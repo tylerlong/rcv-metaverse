@@ -173,11 +173,11 @@ export class Store {
       tx_ts: Date.now() - baseTime,
       event: 'create_req',
       body: {
-        max_remote_audio: 2,
+        max_remote_audio: 0,
         max_remote_video: [
           {
-            quality: 2,
-            slots: 2,
+            quality: 3,
+            slots: 3,
           },
         ],
         conference_id: '',
