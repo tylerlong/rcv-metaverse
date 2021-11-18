@@ -101,7 +101,7 @@ export class Store {
     let r = await rc.get('/rcvideo/v1/bridges', {shortId});
     const bridge = r.data as Bridge;
 
-    // fetch meeting
+    // create meeting session
     r = await rc.post(
       `/rcvideo/v1/bridges/${bridge.id}/meetings`,
       {
