@@ -26,7 +26,11 @@ class App extends Component<{store: Store}> {
                   placeholder="123456789"
                   onChange={e => (store.meetingId = e.target.value)}
                 />
-                <Button type="primary" disabled={!store.isMeetingIdValid}>
+                <Button
+                  type="primary"
+                  disabled={!store.isMeetingIdValid}
+                  onClick={() => store.joinMeeting()}
+                >
                   Join Meeting
                 </Button>
               </Input.Group>

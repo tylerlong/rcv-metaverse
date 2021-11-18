@@ -78,4 +78,9 @@ export class Store {
         'fake-code-verifier',
     });
   }
+
+  // click the join meeting button
+  joinMeeting() {
+    alert('Under construction.');
+  }
 }
