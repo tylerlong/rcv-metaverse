@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Spin} from 'antd';
+import {Button, Spin} from 'antd';
 import {Component} from '@tylerlong/use-proxy/build/react';
 
 import './index.css';
@@ -15,9 +15,14 @@ class App extends Component<{store: Store}> {
         <h1>RCV Metaverse!</h1>
         {store.ready ? (
           store.hasToken ? (
-            'Has valid token'
+            'You have logged in. But this website is still under construction.'
           ) : (
-            'No valid token'
+            <Button
+              type="primary"
+              onClick={() => window.location.replace(store.loginUrl)}
+            >
+              Login
+            </Button>
           )
         ) : (
           <Spin size="large" />

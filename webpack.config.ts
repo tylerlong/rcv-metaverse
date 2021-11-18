@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unpublished-require */
 /* eslint-disable node/no-unpublished-import */
 import {Configuration, DefinePlugin} from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
@@ -38,6 +39,11 @@ const config: Configuration = {
   ],
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    fallback: {
+      crypto: require.resolve('crypto-browserify'),
+      stream: require.resolve('stream-browserify'),
+      buffer: require.resolve('buffer/'),
+    },
   },
 };
 
