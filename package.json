@@ -5,7 +5,8 @@
     "node": ">=16.x"
   },
   "scripts": {
-    "serve": "webpack serve --progress"
+    "serve": "webpack serve --progress",
+    "release": "webpack --progress --mode production"
   },
   "dependencies": {
     "@rc-ex/authorize-uri": "^0.8.1",
