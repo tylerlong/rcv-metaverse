@@ -8,6 +8,7 @@ import {
   REDIRECT_URI,
   TOKEN_INFO_KEY,
 } from './constants';
+import Metaverse from './metaverse';
 import rc from './ringcentral';
 import {
   Bridge,
@@ -21,6 +22,7 @@ import WebSocketManager from './websocket-manager';
 const baseTime = Date.now();
 let req_seq = -1;
 let webSocketManager: WebSocketManager;
+let metaverse: Metaverse;
 
 const checkSavedToken = async () => {
   const tokenInfo = await localforage.getItem<TokenInfo>(TOKEN_INFO_KEY);
@@ -42,8 +44,7 @@ export class Store {
   hasToken = false;
   loginUrl = '';
   meetingId = process.env.RINGCENTRAL_MEETING_ID ?? '';
-  joining = false;
-  hasTrack = false;
+  inMeeting = false;
 
   get isMeetingIdValid() {
     return /\b\d{9}\b/.test(this.meetingId);
@@ -95,7 +96,7 @@ export class Store {
 
   // click the join meeting button
   async joinMeeting() {
-    this.joining = true;
+    this.inMeeting = true;
     const shortId = this.meetingId.match(/\b\d{9}\b/)![0];
 
     // fetch bridge
@@ -284,7 +285,6 @@ export class Store {
     // play the videos
     peerConnection.ontrack = e => {
       if (e.track.kind === 'video') {
-        this.hasTrack = true;
         const videoElement = document.createElement(
           'video'
         ) as HTMLVideoElement;
@@ -302,5 +302,7 @@ export class Store {
         sdp: updateResponse.body.sdp,
       })
     );
+
+    metaverse = new Metaverse();
   }
 }
