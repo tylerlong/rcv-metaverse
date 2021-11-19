@@ -10,7 +10,11 @@ export const createPlayer = (square: Square, scene: BABYLON.Scene) => {
     {segments: 16, diameter: 0.4, sideOrientation: BABYLON.Mesh.FRONTSIDE},
     scene
   );
-  player.position = new BABYLON.Vector3(square.player.x, 0.2, square.player.z);
+  player.position = new BABYLON.Vector3(
+    square.player.x - (square.size - 1) / 2,
+    0.2,
+    square.player.z - (square.size - 1) / 2
+  );
   const ballMaterial = new BABYLON.StandardMaterial(uuid(), scene);
   ballMaterial.diffuseTexture = new BABYLON.Texture(playerImage, scene);
   player.material = ballMaterial;

@@ -10,7 +10,7 @@ class Scene {
   square: Square;
   scene: BABYLON.Scene;
   camera: BABYLON.FreeCamera;
-  light: BABYLON.SpotLight;
+  light: BABYLON.DirectionalLight;
 
   ground: BABYLON.Mesh;
   walls: BABYLON.Mesh;
@@ -30,12 +30,9 @@ class Scene {
       this.scene
     );
 
-    this.light = new BABYLON.SpotLight(
+    this.light = new BABYLON.DirectionalLight(
       uuid(),
-      new BABYLON.Vector3(0, 4, 0), // x, z will be override anyway
-      new BABYLON.Vector3(0, -1, 0.5),
-      Math.PI / 3,
-      30,
+      new BABYLON.Vector3(0, -1, 0),
       this.scene
     );
 
@@ -51,8 +48,6 @@ class Scene {
     this.camera.position.x = this.player.position.x;
     this.camera.position.z = this.player.position.z - 2;
     this.camera.setTarget(this.player.position);
-    this.light.position.x = this.player.position.x;
-    this.light.position.z = this.player.position.z - 2;
     this.scene.render();
   }
 
