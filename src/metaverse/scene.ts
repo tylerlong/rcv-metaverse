@@ -10,7 +10,7 @@ class Scene {
   square: Square;
   scene: BABYLON.Scene;
   camera: BABYLON.FreeCamera;
-  light: BABYLON.DirectionalLight;
+  light: BABYLON.Light;
 
   ground: BABYLON.Mesh;
   walls: BABYLON.Mesh;
@@ -32,7 +32,7 @@ class Scene {
 
     this.light = new BABYLON.DirectionalLight(
       uuid(),
-      new BABYLON.Vector3(0, -1, 0),
+      new BABYLON.Vector3(0, -1, 1),
       this.scene
     );
 
