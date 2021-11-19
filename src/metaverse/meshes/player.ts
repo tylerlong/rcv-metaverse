@@ -15,9 +15,9 @@ export const createPlayer = (square: Square, scene: BABYLON.Scene) => {
     0.2,
     square.player.z - (square.size - 1) / 2
   );
-  const ballMaterial = new BABYLON.StandardMaterial(uuid(), scene);
-  ballMaterial.diffuseTexture = new BABYLON.Texture(playerImage, scene);
-  player.material = ballMaterial;
+  const playerMaterial = new BABYLON.StandardMaterial(uuid(), scene);
+  playerMaterial.diffuseTexture = new BABYLON.Texture(playerImage, scene);
+  player.material = playerMaterial;
   player.physicsImpostor = new BABYLON.PhysicsImpostor(
     player,
     BABYLON.PhysicsImpostor.SphereImpostor,

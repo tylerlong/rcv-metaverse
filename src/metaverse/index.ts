@@ -25,7 +25,7 @@ class Metaverse {
     this.windowResizeListener = this.windowResizeListener.bind(this);
     window.addEventListener('resize', this.windowResizeListener);
 
-    this.scene = new Scene(this.engine, 101);
+    this.scene = new Scene(this.engine, 11);
     this.engine.runRenderLoop(() => this.scene.render());
   }
 
