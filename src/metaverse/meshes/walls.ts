@@ -17,8 +17,8 @@ export const createWalls = (square: Square, scene: BABYLON.Scene) => {
         const wall = createWall(
           {
             id: `${x}-${z}`,
-            x: x - (square.size - 1) / 2,
-            z: z - (square.size - 1) / 2,
+            x: x,
+            z: z,
           },
           scene
         );

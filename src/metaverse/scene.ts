@@ -31,7 +31,7 @@ class Scene {
 
     this.camera = new BABYLON.FreeCamera(
       uuid(),
-      new BABYLON.Vector3(0, 1, -(this.square.size - 1) / 2),
+      new BABYLON.Vector3(this.square.size / 2, 1, 2),
       this.scene
     );
     this.newCameraPosition = this.camera.position;
@@ -102,29 +102,29 @@ class Scene {
     switch (direction) {
       case 'left': {
         this.newCameraPosition.x -= speed;
-        if (this.newCameraPosition.x <= -(this.square.size - 1) / 2) {
-          this.newCameraPosition.x = -(this.square.size - 1) / 2 + 1;
+        if (this.newCameraPosition.x <= 2) {
+          this.newCameraPosition.x = 2;
         }
         break;
       }
       case 'right': {
         this.newCameraPosition.x += speed;
-        if (this.newCameraPosition.x >= (this.square.size - 1) / 2) {
-          this.newCameraPosition.x = (this.square.size - 1) / 2 - 1;
+        if (this.newCameraPosition.x >= this.square.size - 3) {
+          this.newCameraPosition.x = this.square.size - 3;
         }
         break;
       }
       case 'forward': {
         this.newCameraPosition.z += speed;
-        if (this.newCameraPosition.z >= (this.square.size - 1) / 2 - 1) {
-          this.newCameraPosition.z = (this.square.size - 1) / 2 - 2;
+        if (this.newCameraPosition.z >= this.square.size - 3) {
+          this.newCameraPosition.z = this.square.size - 3;
         }
         break;
       }
       case 'backward': {
         this.newCameraPosition.z -= speed;
-        if (this.newCameraPosition.z <= -(this.square.size - 1) / 2) {
-          this.newCameraPosition.z = -(this.square.size - 1) / 2;
+        if (this.newCameraPosition.z <= 2) {
+          this.newCameraPosition.z = 2;
         }
         break;
       }

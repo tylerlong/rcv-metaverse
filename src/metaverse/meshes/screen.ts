@@ -10,7 +10,11 @@ export const createScreen = (square: Square, scene: BABYLON.Scene) => {
     scene
   );
   screen.rotate(BABYLON.Axis.Z, Math.PI, BABYLON.Space.WORLD);
-  screen.position = new BABYLON.Vector3(0, 4.5 / 2, (square.size - 1) / 2 - 1);
+  screen.position = new BABYLON.Vector3(
+    square.size / 2,
+    4.5 / 2,
+    square.size - 2
+  );
   const screenMaterial = new BABYLON.StandardMaterial(uuid(), scene);
   const videoTexture = new BABYLON.VideoTexture(
     uuid(),
