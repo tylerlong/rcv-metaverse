@@ -10,7 +10,8 @@ class Scene {
   square: Square;
   scene: BABYLON.Scene;
   camera: BABYLON.FreeCamera;
-  light: BABYLON.Light;
+  light1: BABYLON.Light;
+  light2: BABYLON.Light;
 
   ground: BABYLON.Mesh;
   walls: BABYLON.Mesh;
@@ -26,13 +27,18 @@ class Scene {
 
     this.camera = new BABYLON.FreeCamera(
       uuid(),
-      new BABYLON.Vector3(0, 6, -10),
+      new BABYLON.Vector3(0, 1, 0),
       this.scene
     );
 
-    this.light = new BABYLON.DirectionalLight(
+    this.light1 = new BABYLON.DirectionalLight(
       uuid(),
-      new BABYLON.Vector3(0, -1, 1),
+      new BABYLON.Vector3(2, -1, 2),
+      this.scene
+    );
+    this.light2 = new BABYLON.DirectionalLight(
+      uuid(),
+      new BABYLON.Vector3(-2, -1, -2),
       this.scene
     );
 
@@ -46,8 +52,14 @@ class Scene {
 
   render() {
     this.camera.position.x = this.player.position.x;
-    this.camera.position.z = this.player.position.z - 2;
-    this.camera.setTarget(this.player.position);
+    this.camera.position.z = this.player.position.z - 1;
+    this.camera.setTarget(
+      new BABYLON.Vector3(
+        this.player.position.x,
+        this.camera.position.y,
+        this.player.position.z
+      )
+    );
     this.scene.render();
   }
 
@@ -55,7 +67,8 @@ class Scene {
     window.removeEventListener('keydown', this.keydownListener);
     this.player.dispose();
     this.camera.dispose();
-    this.light.dispose();
+    this.light1.dispose();
+    this.light2.dispose();
     this.ground.dispose();
     this.walls.dispose();
     this.scene.dispose();
