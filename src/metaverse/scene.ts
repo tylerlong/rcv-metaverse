@@ -1,7 +1,7 @@
 import * as BABYLON from 'babylonjs';
 import {createGround} from './meshes/ground';
 
-import {createPlayer} from './meshes/player';
+// import {createPlayer} from './meshes/player';
 import {createWalls} from './meshes/walls';
 import Square from './square';
 import {uuid} from './utils';
@@ -15,7 +15,9 @@ class Scene {
 
   ground: BABYLON.Mesh;
   walls: BABYLON.Mesh;
-  player: BABYLON.Mesh;
+  // player: BABYLON.Mesh;
+
+  newCameraPosition: BABYLON.Vector3;
 
   constructor(engine: BABYLON.Engine, size: number) {
     this.square = new Square(size);
@@ -27,9 +29,10 @@ class Scene {
 
     this.camera = new BABYLON.FreeCamera(
       uuid(),
-      new BABYLON.Vector3(0, 1, 0),
+      new BABYLON.Vector3(0, 1, -(this.square.size - 1) / 2),
       this.scene
     );
+    this.newCameraPosition = this.camera.position;
 
     this.light1 = new BABYLON.DirectionalLight(
       uuid(),
@@ -44,20 +47,28 @@ class Scene {
 
     this.ground = createGround(this.square, this.scene);
     this.walls = createWalls(this.square, this.scene)!;
-    this.player = createPlayer(this.square, this.scene);
+    // this.player = createPlayer(this.square, this.scene);
 
     this.keydownListener = this.keydownListener.bind(this);
     window.addEventListener('keydown', this.keydownListener);
+
+    this.scene.registerBeforeRender(() => {
+      this.camera.position = BABYLON.Vector3.Lerp(
+        this.camera.position,
+        this.newCameraPosition,
+        0.05
+      );
+    });
   }
 
   render() {
-    this.camera.position.x = this.player.position.x;
-    this.camera.position.z = this.player.position.z - 1;
+    // this.camera.position.x = this.player.position.x;
+    // this.camera.position.z = this.player.position.z - 1;
     this.camera.setTarget(
       new BABYLON.Vector3(
-        this.player.position.x,
+        this.camera.position.x,
         this.camera.position.y,
-        this.player.position.z
+        this.camera.position.z + 1
       )
     );
     this.scene.render();
@@ -65,7 +76,7 @@ class Scene {
 
   dispose() {
     window.removeEventListener('keydown', this.keydownListener);
-    this.player.dispose();
+    // this.player.dispose();
     this.camera.dispose();
     this.light1.dispose();
     this.light2.dispose();
@@ -74,35 +85,73 @@ class Scene {
     this.scene.dispose();
   }
 
+  moveCamera(direction: 'left' | 'right' | 'forward' | 'backward') {
+    const speed = 1;
+    switch (direction) {
+      case 'left': {
+        this.newCameraPosition.x -= speed;
+        if (this.newCameraPosition.x <= -(this.square.size - 1) / 2) {
+          this.newCameraPosition.x = -(this.square.size - 1) / 2 + 1;
+        }
+        break;
+      }
+      case 'right': {
+        this.newCameraPosition.x += speed;
+        if (this.newCameraPosition.x >= (this.square.size - 1) / 2) {
+          this.newCameraPosition.x = (this.square.size - 1) / 2 - 1;
+        }
+        break;
+      }
+      case 'forward': {
+        this.newCameraPosition.z += speed;
+        if (this.newCameraPosition.z >= (this.square.size - 1) / 2 - 1) {
+          this.newCameraPosition.z = (this.square.size - 1) / 2 - 2;
+        }
+        break;
+      }
+      case 'backward': {
+        this.newCameraPosition.z -= speed;
+        if (this.newCameraPosition.z <= -(this.square.size - 1) / 2) {
+          this.newCameraPosition.z = -(this.square.size - 1) / 2;
+        }
+        break;
+      }
+    }
+  }
+
   keydownListener(event: KeyboardEvent) {
-    const speed = 3;
+    // const speed = 3;
     switch (event.key) {
       case 'ArrowLeft': {
         event.preventDefault();
-        this.player.physicsImpostor?.setLinearVelocity(
-          new BABYLON.Vector3(-speed, 0, 0)
-        );
+        this.moveCamera('left');
+        // this.player.physicsImpostor?.setLinearVelocity(
+        //   new BABYLON.Vector3(-speed, 0, 0)
+        // );
         break;
       }
       case 'ArrowRight': {
         event.preventDefault();
-        this.player.physicsImpostor?.setLinearVelocity(
-          new BABYLON.Vector3(speed, 0, 0)
-        );
+        this.moveCamera('right');
+        // this.player.physicsImpostor?.setLinearVelocity(
+        //   new BABYLON.Vector3(speed, 0, 0)
+        // );
         break;
       }
       case 'ArrowUp': {
         event.preventDefault();
-        this.player.physicsImpostor?.setLinearVelocity(
-          new BABYLON.Vector3(0, 0, speed)
-        );
+        this.moveCamera('forward');
+        // this.player.physicsImpostor?.setLinearVelocity(
+        //   new BABYLON.Vector3(0, 0, speed)
+        // );
         break;
       }
       case 'ArrowDown': {
         event.preventDefault();
-        this.player.physicsImpostor?.setLinearVelocity(
-          new BABYLON.Vector3(0, 0, -speed)
-        );
+        this.moveCamera('backward');
+        // this.player.physicsImpostor?.setLinearVelocity(
+        //   new BABYLON.Vector3(0, 0, -speed)
+        // );
         break;
       }
       default: {
