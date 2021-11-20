@@ -8,5 +8,5 @@ Participants videos and screen share video will be projected on different screen
 ## Todo
 
 - Make the release package smaller
-- Join a meeting and stream video in real time
 - Create a 3D world and display the videos
+  - ref: https://www.babylonjs-playground.com/#9FSDC7#49
