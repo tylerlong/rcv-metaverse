@@ -12,6 +12,8 @@ class Scene {
   camera: BABYLON.FreeCamera;
   light1: BABYLON.Light;
   light2: BABYLON.Light;
+  light3: BABYLON.Light;
+  light4: BABYLON.Light;
 
   ground: BABYLON.Mesh;
   walls: BABYLON.Mesh;
@@ -42,6 +44,16 @@ class Scene {
     this.light2 = new BABYLON.DirectionalLight(
       uuid(),
       new BABYLON.Vector3(-2, -1, -2),
+      this.scene
+    );
+    this.light3 = new BABYLON.DirectionalLight(
+      uuid(),
+      new BABYLON.Vector3(2, -1, -2),
+      this.scene
+    );
+    this.light4 = new BABYLON.DirectionalLight(
+      uuid(),
+      new BABYLON.Vector3(-2, -1, 2),
       this.scene
     );
 
@@ -78,6 +90,8 @@ class Scene {
     this.camera.dispose();
     this.light1.dispose();
     this.light2.dispose();
+    this.light3.dispose();
+    this.light4.dispose();
     this.ground.dispose();
     this.walls.dispose();
     this.scene.dispose();
