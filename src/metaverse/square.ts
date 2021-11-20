@@ -1,14 +1,11 @@
-// type MazeLocation = {
-//   x: number;
-//   z: number;
-// };
-
 // a square like Times Square
 class Square {
-  size: number;
+  width: number;
+  height: number;
 
-  constructor(size: number) {
-    this.size = size;
+  constructor(width: number, height: number) {
+    this.width = width;
+    this.height = height;
   }
 }
 

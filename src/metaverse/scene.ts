@@ -19,8 +19,8 @@ class Scene {
 
   newCameraPosition: BABYLON.Vector3;
 
-  constructor(engine: BABYLON.Engine, size: number) {
-    this.square = new Square(size);
+  constructor(engine: BABYLON.Engine, width: number, height: number) {
+    this.square = new Square(width, height);
     this.scene = new BABYLON.Scene(engine);
 
     const gravityVector = new BABYLON.Vector3(0, -9.8, 0);
@@ -29,7 +29,7 @@ class Scene {
 
     this.camera = new BABYLON.FreeCamera(
       uuid(),
-      new BABYLON.Vector3(this.square.size / 2, 1, 2),
+      new BABYLON.Vector3(this.square.width / 2, 1, 2),
       this.scene
     );
     this.newCameraPosition = this.camera.position;
@@ -105,15 +105,15 @@ class Scene {
       }
       case 'right': {
         this.newCameraPosition.x += speed;
-        if (this.newCameraPosition.x >= this.square.size - 3) {
-          this.newCameraPosition.x = this.square.size - 3;
+        if (this.newCameraPosition.x >= this.square.width - 3) {
+          this.newCameraPosition.x = this.square.width - 3;
         }
         break;
       }
       case 'forward': {
         this.newCameraPosition.z += speed;
-        if (this.newCameraPosition.z >= this.square.size - 3) {
-          this.newCameraPosition.z = this.square.size - 3;
+        if (this.newCameraPosition.z >= this.square.height - 3) {
+          this.newCameraPosition.z = this.square.height - 3;
         }
         break;
       }
