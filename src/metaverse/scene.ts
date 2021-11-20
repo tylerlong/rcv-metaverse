@@ -1,8 +1,8 @@
 import * as BABYLON from 'babylonjs';
 import {createGround} from './meshes/ground';
 
-// import {createPlayer} from './meshes/player';
 import {createWalls} from './meshes/walls';
+import {createScreen} from './meshes/screen';
 import Square from './square';
 import {uuid} from './utils';
 
@@ -15,7 +15,7 @@ class Scene {
 
   ground: BABYLON.Mesh;
   walls: BABYLON.Mesh;
-  // player: BABYLON.Mesh;
+  screen: BABYLON.Mesh;
 
   newCameraPosition: BABYLON.Vector3;
 
@@ -47,7 +47,7 @@ class Scene {
 
     this.ground = createGround(this.square, this.scene);
     this.walls = createWalls(this.square, this.scene)!;
-    // this.player = createPlayer(this.square, this.scene);
+    this.screen = createScreen(this.square, this.scene);
 
     this.keydownListener = this.keydownListener.bind(this);
     window.addEventListener('keydown', this.keydownListener);
@@ -62,8 +62,6 @@ class Scene {
   }
 
   render() {
-    // this.camera.position.x = this.player.position.x;
-    // this.camera.position.z = this.player.position.z - 1;
     this.camera.setTarget(
       new BABYLON.Vector3(
         this.camera.position.x,
@@ -76,7 +74,7 @@ class Scene {
 
   dispose() {
     window.removeEventListener('keydown', this.keydownListener);
-    // this.player.dispose();
+    this.screen.dispose();
     this.camera.dispose();
     this.light1.dispose();
     this.light2.dispose();
@@ -120,38 +118,25 @@ class Scene {
   }
 
   keydownListener(event: KeyboardEvent) {
-    // const speed = 3;
     switch (event.key) {
       case 'ArrowLeft': {
         event.preventDefault();
         this.moveCamera('left');
-        // this.player.physicsImpostor?.setLinearVelocity(
-        //   new BABYLON.Vector3(-speed, 0, 0)
-        // );
         break;
       }
       case 'ArrowRight': {
         event.preventDefault();
         this.moveCamera('right');
-        // this.player.physicsImpostor?.setLinearVelocity(
-        //   new BABYLON.Vector3(speed, 0, 0)
-        // );
         break;
       }
       case 'ArrowUp': {
         event.preventDefault();
         this.moveCamera('forward');
-        // this.player.physicsImpostor?.setLinearVelocity(
-        //   new BABYLON.Vector3(0, 0, speed)
-        // );
         break;
       }
       case 'ArrowDown': {
         event.preventDefault();
         this.moveCamera('backward');
-        // this.player.physicsImpostor?.setLinearVelocity(
-        //   new BABYLON.Vector3(0, 0, -speed)
-        // );
         break;
       }
       default: {

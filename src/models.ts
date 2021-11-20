@@ -22,7 +22,6 @@ import WebSocketManager from './websocket-manager';
 const baseTime = Date.now();
 let req_seq = -1;
 let webSocketManager: WebSocketManager;
-let metaverse: Metaverse;
 
 const checkSavedToken = async () => {
   const tokenInfo = await localforage.getItem<TokenInfo>(TOKEN_INFO_KEY);
@@ -303,6 +302,6 @@ export class Store {
       })
     );
 
-    metaverse = new Metaverse();
+    new Metaverse(21);
   }
 }
