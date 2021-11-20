@@ -2,7 +2,6 @@ import * as BABYLON from 'babylonjs';
 
 import Square from '../square';
 import {uuid} from '../utils';
-import screenImage from '../images/player.jpg';
 
 export const createScreen = (square: Square, scene: BABYLON.Scene) => {
   const columns = 6; // 6 columns
@@ -21,7 +20,7 @@ export const createScreen = (square: Square, scene: BABYLON.Scene) => {
     uuid(),
     {
       width: 8,
-      height: 8,
+      height: 4.5,
       depth: 1,
       faceUV,
     },
@@ -29,11 +28,15 @@ export const createScreen = (square: Square, scene: BABYLON.Scene) => {
   );
   screen.position = new BABYLON.Vector3(0, 5, (square.size - 1) / 2 - 1);
   const screenMaterial = new BABYLON.StandardMaterial(uuid(), scene);
-  screenMaterial.diffuseTexture = new BABYLON.Texture(screenImage, scene);
-  (screenMaterial.diffuseTexture as BABYLON.Texture).uScale =
-    (square.size - 1) / 2;
-  (screenMaterial.diffuseTexture as BABYLON.Texture).vScale =
-    (square.size - 1) / 2;
+  const videoTexture = new BABYLON.VideoTexture(
+    uuid(),
+    document.getElementById('video-1') as HTMLVideoElement,
+    scene,
+    true
+  );
+  screenMaterial.diffuseTexture = videoTexture;
+  videoTexture.uScale = 8;
+  videoTexture.vScale = 5;
   screen.material = screenMaterial;
   screen.physicsImpostor = new BABYLON.PhysicsImpostor(
     screen,

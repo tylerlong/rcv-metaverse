@@ -22,6 +22,7 @@ import WebSocketManager from './websocket-manager';
 const baseTime = Date.now();
 let req_seq = -1;
 let webSocketManager: WebSocketManager;
+let metaverse: Metaverse | undefined = undefined;
 
 const checkSavedToken = async () => {
   const tokenInfo = await localforage.getItem<TokenInfo>(TOKEN_INFO_KEY);
@@ -282,15 +283,21 @@ export class Store {
     });
 
     // play the videos
+    let count = 0;
     peerConnection.ontrack = e => {
       if (e.track.kind === 'video') {
         const videoElement = document.createElement(
           'video'
         ) as HTMLVideoElement;
+        count += 1;
+        videoElement.id = `video-${count}`;
         videoElement.autoplay = true;
         videoElement.setAttribute('width', '400');
         document.body.appendChild(videoElement);
         videoElement.srcObject = e.streams[0];
+        if (!metaverse) {
+          metaverse = new Metaverse(21);
+        }
       }
     };
 
@@ -301,7 +308,5 @@ export class Store {
         sdp: updateResponse.body.sdp,
       })
     );
-
-    new Metaverse(21);
   }
 }
