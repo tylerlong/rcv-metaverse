@@ -36,7 +36,7 @@ export const createScreen = (square: Square, scene: BABYLON.Scene) => {
   );
   screenMaterial.diffuseTexture = videoTexture;
   videoTexture.uScale = 8;
-  videoTexture.vScale = 5;
+  videoTexture.vScale = 3;
   screen.material = screenMaterial;
   screen.physicsImpostor = new BABYLON.PhysicsImpostor(
     screen,
