@@ -19,6 +19,7 @@ export const createScreen = (square: Square, scene: BABYLON.Scene) => {
     true,
     true
   );
+  videoTexture.uScale = -1;
   screenMaterial.diffuseTexture = videoTexture;
   screen.material = screenMaterial;
   return screen;
