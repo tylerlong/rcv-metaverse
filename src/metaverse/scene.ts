@@ -1,7 +1,6 @@
 import * as BABYLON from 'babylonjs';
 import {createGround} from './meshes/ground';
 
-import {createWalls} from './meshes/walls';
 import {createScreen} from './meshes/screen';
 import Square from './square';
 import {uuid} from './utils';
@@ -16,7 +15,6 @@ class Scene {
   light4: BABYLON.Light;
 
   ground: BABYLON.Mesh;
-  walls: BABYLON.Mesh;
   screen: BABYLON.Mesh;
 
   newCameraPosition: BABYLON.Vector3;
@@ -58,7 +56,6 @@ class Scene {
     );
 
     this.ground = createGround(this.square, this.scene);
-    this.walls = createWalls(this.square, this.scene)!;
     this.screen = createScreen(this.square, this.scene);
 
     this.keydownListener = this.keydownListener.bind(this);
@@ -93,7 +90,6 @@ class Scene {
     this.light3.dispose();
     this.light4.dispose();
     this.ground.dispose();
-    this.walls.dispose();
     this.scene.dispose();
   }
 
