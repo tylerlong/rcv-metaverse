@@ -3,12 +3,9 @@ import * as BABYLON from 'babylonjs';
 import Square from '../square';
 import {uuid} from '../utils';
 
-export const createScreens = (
-  square: Square,
-  scene: BABYLON.Scene,
-  count: number
-) => {
+export const createScreens = (square: Square, scene: BABYLON.Scene) => {
   const result: BABYLON.Mesh[] = [];
+  const count = square.numberOfScreens;
   for (let i = 0; i < count; i++) {
     const screen = BABYLON.MeshBuilder.CreatePlane(
       uuid(),

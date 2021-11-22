@@ -10,7 +10,7 @@ class Metaverse {
   engine: BABYLON.Engine;
   scene: Scene;
 
-  constructor(width: number, height: number) {
+  constructor(numberOfScreens: number) {
     this.canvas = document.getElementById(
       'metaverse-canvas'
     ) as HTMLCanvasElement;
@@ -25,7 +25,7 @@ class Metaverse {
     this.windowResizeListener = this.windowResizeListener.bind(this);
     window.addEventListener('resize', this.windowResizeListener);
 
-    this.scene = new Scene(this.engine, width, height);
+    this.scene = new Scene(this.engine, numberOfScreens);
     this.engine.runRenderLoop(() => this.scene.render());
   }
 

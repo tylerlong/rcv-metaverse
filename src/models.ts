@@ -1,6 +1,7 @@
 import AuthorizeUriExtension from '@rc-ex/authorize-uri';
 import {TokenInfo} from '@rc-ex/core/lib/definitions';
 import localforage from 'localforage';
+import {debounce} from 'lodash';
 
 import {
   CODE,
@@ -282,6 +283,20 @@ export class Store {
       id: session.id,
     });
 
+    const debouncedCreateMetaverse = debounce(
+      () => {
+        if (!metaverse) {
+          metaverse = new Metaverse(count);
+        }
+      },
+      1000,
+      {
+        trailing: true,
+        leading: false,
+        maxWait: 10000,
+      }
+    );
+
     // play the videos
     let count = 0;
     peerConnection.ontrack = e => {
@@ -295,9 +310,7 @@ export class Store {
         videoElement.setAttribute('width', '400');
         document.body.appendChild(videoElement);
         videoElement.srcObject = e.streams[0];
-        if (!metaverse) {
-          metaverse = new Metaverse(20, 20);
-        }
+        debouncedCreateMetaverse();
       }
     };
 

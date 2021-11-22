@@ -19,8 +19,8 @@ class Scene {
 
   newCameraPosition: BABYLON.Vector3;
 
-  constructor(engine: BABYLON.Engine, width: number, height: number) {
-    this.square = new Square(width, height);
+  constructor(engine: BABYLON.Engine, numberOfScreens: number) {
+    this.square = new Square(numberOfScreens);
     this.scene = new BABYLON.Scene(engine);
 
     const gravityVector = new BABYLON.Vector3(0, -9.8, 0);
@@ -56,7 +56,7 @@ class Scene {
     );
 
     this.ground = createGround(this.square, this.scene);
-    this.screens = createScreens(this.square, this.scene, 2);
+    this.screens = createScreens(this.square, this.scene);
 
     this.keydownListener = this.keydownListener.bind(this);
     window.addEventListener('keydown', this.keydownListener);

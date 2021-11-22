@@ -17,11 +17,13 @@
     "cannon-es": "^0.18.0",
     "hyperid": "^2.3.1",
     "localforage": "^1.10.0",
+    "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "wait-for-async": "^0.6.0"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.177",
     "@types/node": "^16.11.7",
     "@types/react-dom": "^17.0.11",
     "buffer": "^6.0.3",
