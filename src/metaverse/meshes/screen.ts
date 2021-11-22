@@ -17,14 +17,14 @@ export const createScreens = (
     );
     screen.rotate(BABYLON.Axis.Z, Math.PI, BABYLON.Space.WORLD);
     screen.position = new BABYLON.Vector3(
-      square.width / 2,
+      ((i * 2 + 1) * square.width) / count / 2,
       4.5 / 2,
       square.height - 2
     );
     const screenMaterial = new BABYLON.StandardMaterial(uuid(), scene);
     const videoTexture = new BABYLON.VideoTexture(
       uuid(),
-      document.getElementById('video-1') as HTMLVideoElement,
+      document.getElementById(`video-${i + 1}`) as HTMLVideoElement,
       scene,
       true,
       true

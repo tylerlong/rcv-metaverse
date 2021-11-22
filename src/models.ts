@@ -296,7 +296,7 @@ export class Store {
         document.body.appendChild(videoElement);
         videoElement.srcObject = e.streams[0];
         if (!metaverse) {
-          metaverse = new Metaverse(21, 21);
+          metaverse = new Metaverse(20, 20);
         }
       }
     };

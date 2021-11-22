@@ -56,7 +56,7 @@ class Scene {
     );
 
     this.ground = createGround(this.square, this.scene);
-    this.screens = createScreens(this.square, this.scene, 1);
+    this.screens = createScreens(this.square, this.scene, 2);
 
     this.keydownListener = this.keydownListener.bind(this);
     window.addEventListener('keydown', this.keydownListener);
