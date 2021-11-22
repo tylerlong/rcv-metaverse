@@ -61,7 +61,12 @@ class App extends Component<{store: Store}> {
         </>
       );
     }
-    return <canvas id="metaverse-canvas" />;
+    return (
+      <>
+        {store.streamsReady ? null : <Spin size="large" />}
+        <canvas id="metaverse-canvas" />
+      </>
+    );
   }
 }
 

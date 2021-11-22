@@ -46,6 +46,7 @@ export class Store {
   loginUrl = '';
   meetingId = process.env.RINGCENTRAL_MEETING_ID ?? '';
   inMeeting = false;
+  streamsReady = false;
 
   get isMeetingIdValid() {
     return /\b\d{9}\b/.test(this.meetingId);
@@ -287,6 +288,7 @@ export class Store {
       () => {
         if (!metaverse) {
           metaverse = new Metaverse(count);
+          this.streamsReady = true;
         }
       },
       1000,
