@@ -312,6 +312,7 @@ export class Store {
         videoElement.setAttribute('width', '400');
         document.body.appendChild(videoElement);
         videoElement.srcObject = e.streams[0];
+        videoElement.style.display = 'none';
         debouncedCreateMetaverse();
       }
     };
