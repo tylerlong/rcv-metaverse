@@ -230,10 +230,18 @@ export class Store {
       sdpSemantics: 'plan-b',
     } as RTCConfiguration);
 
-    const userMedia = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-      video: true,
-    });
+    let userMedia: MediaStream;
+    try {
+      userMedia = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true,
+      });
+    } catch (e) {
+      userMedia = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: false, // Oculus Quest 2 doesn't have a camera
+      });
+    }
     for (const track of userMedia.getTracks()) {
       peerConnection.addTrack(track, userMedia);
     }
