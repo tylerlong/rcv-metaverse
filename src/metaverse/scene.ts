@@ -68,6 +68,11 @@ class Scene {
         0.05
       );
     });
+
+    const env = this.scene.createDefaultEnvironment()!;
+    this.scene.createDefaultXRExperienceAsync({
+      floorMeshes: [env.ground!],
+    });
   }
 
   render() {
