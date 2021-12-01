@@ -230,19 +230,25 @@ export class Store {
       sdpSemantics: 'plan-b',
     } as RTCConfiguration);
 
-    let userMedia: MediaStream;
-    try {
-      userMedia = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: true,
-      });
-    } catch (e) {
-      userMedia = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: false, // Oculus Quest 2 doesn't have a camera
-      });
-    }
+    // let userMedia: MediaStream;
+    // try {
+    const userMedia = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: false,
+    });
+    // } catch (e) {
+    //   userMedia = await navigator.mediaDevices.getUserMedia({
+    //     audio: true,
+    //     video: false, // Oculus Quest 2 doesn't have a camera
+    //   });
+    // }
+    const canvas = document.createElement('canvas') as HTMLCanvasElement;
+    document.body.appendChild(canvas);
+    const userMedia2 = canvas.captureStream();
     for (const track of userMedia.getTracks()) {
+      peerConnection.addTrack(track, userMedia);
+    }
+    for (const track of userMedia2.getTracks()) {
       peerConnection.addTrack(track, userMedia);
     }
     const offer = await peerConnection.createOffer();
