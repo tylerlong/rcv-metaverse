@@ -69,10 +69,11 @@ class Scene {
       );
     });
 
-    const env = this.scene.createDefaultEnvironment()!;
-    this.scene.createDefaultXRExperienceAsync({
-      floorMeshes: [env.ground!],
-    });
+    // todo: uncomment below for WebXR support
+    // const env = this.scene.createDefaultEnvironment()!;
+    // this.scene.createDefaultXRExperienceAsync({
+    //   floorMeshes: [env.ground!],
+    // });
   }
 
   render() {
