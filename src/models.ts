@@ -185,8 +185,8 @@ export class Store {
           },
         ],
         conference_id: '',
-        sdp_semantics: 'unified-plan',
-        // sdp_semantics: 'plan-b',
+        // sdp_semantics: 'unified-plan',
+        sdp_semantics: 'plan-b',
         token: session.token,
         meta: {
           meeting_id: bridge.shortId,
@@ -228,21 +228,13 @@ export class Store {
     // WebRTC peer connection
     const peerConnection = new RTCPeerConnection({
       iceServers: createResponse.body.ice_servers,
-      // sdpSemantics: 'plan-b',
+      sdpSemantics: 'plan-b',
     } as RTCConfiguration);
 
-    // let userMedia: MediaStream;
-    // try {
     const userMedia = await navigator.mediaDevices.getUserMedia({
       audio: true,
       video: false,
     });
-    // } catch (e) {
-    //   userMedia = await navigator.mediaDevices.getUserMedia({
-    //     audio: true,
-    //     video: false, // Oculus Quest 2 doesn't have a camera
-    //   });
-    // }
     const canvas = document.createElement('canvas') as HTMLCanvasElement;
     document.body.appendChild(canvas);
     const userMedia2 = canvas.captureStream();
