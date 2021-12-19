@@ -5,7 +5,7 @@
     "node": ">=16.x"
   },
   "scripts": {
-    "serve": "webpack serve --progress",
+    "serve": "webpack serve --progress --mode development",
     "release": "webpack --progress --mode production"
   },
   "dependencies": {
